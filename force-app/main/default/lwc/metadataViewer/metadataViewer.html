@@ -1,0 +1,68 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <div>        
+        <lightning-layout>
+            <lightning-layout-item size="2" class="slds-align_absolute-center" padding="around-small">
+                Select Custom Metadata Type
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                    <lightning-combobox
+                        variant="label-hidden"
+                        value={selectedCustomMetadata}
+                        placeholder="Select Custom Metadata Type"
+                        options={options}
+                        onchange={handleMetadataChange}
+                        required
+                    ></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="2" class="slds-align_absolute-center" padding="around-small">                
+                    <lightning-button label="Show Details" variant="brand" onclick={onShowDetails}>
+                    </lightning-button>                
+            </lightning-layout-item>
+            <lightning-layout-item size="2" class="slds-align_absolute-center" padding="around-small">                
+                    <lightning-button label="Show Records" variant="brand" onclick={onShowRecords}>
+                    </lightning-button>                
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+    <!-- Details -->
+    <template if:true={showDetails}>
+
+        <lightning-card class="slds-p-horizontal_small">
+            <h2 slot="title">
+                {metadataDetailWrapper.label}
+            </h2>
+            <p class="slds-m-around_xx-small slds-p-horizontal_small">
+                <span>Developer Name: </span>
+                <span>{selectedCustomMetadata}</span>
+            </p>
+            <p class="slds-m-around_xx-small slds-p-horizontal_small">
+                <span>Plural Label: </span>
+                <span>{metadataDetailWrapper.pluralLabel}</span>
+            </p>
+        </lightning-card>
+
+        <lightning-datatable
+            key-field="fieldName"
+            data={detailData}
+            columns={detailColumns}
+            column-widths-mode="auto"
+            hide-checkbox-column="true">
+        </lightning-datatable>
+
+    </template>
+
+    <!-- Records -->
+    <template if:true={showRecords}>
+        <lightning-datatable
+            key-field="Id"
+            data={data}
+            columns={dataColumns}
+            column-widths-mode="auto"
+            hide-checkbox-column="true">
+        </lightning-datatable>
+    </template>
+</template>
