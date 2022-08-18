@@ -1,7 +1,9 @@
 import { LightningElement } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import fetchAvailableCustomMetadata from '@salesforce/apex/CustomMetadataService.fetchAvailableCustomMetadata';
 import getDetailsOf from '@salesforce/apex/CustomMetadataService.getDetailsOf';
 import getCustomMetadataRecords from '@salesforce/apex/CustomMetadataService.getCustomMetadataRecords';
+import getCustomMetadataRecordsByQuery from '@salesforce/apex/CustomMetadataService.getCustomMetadataRecordsByQuery';
 
 export default class MetadataViewer extends LightningElement {
     metadataOptions = [];
@@ -9,6 +11,7 @@ export default class MetadataViewer extends LightningElement {
     selectedCustomMetadata = '';
     selectedButton = '';
     metadataDetailWrapper = {};
+    queryValue = '';
 
     detailData = [];
     detailColumns = [
@@ -83,5 +86,40 @@ export default class MetadataViewer extends LightningElement {
             this.showSpinner = false;
             console.error(error);
         });
+    }
+
+    onQueryChange(event) {
+        this.queryValue = event.target.value;
+    }
+
+    onQueryExecute(event) {
+        if(!this.queryValue) {
+            console.log('Invalid query');
+            this.showToastEvent('Error', 'Please enter a valid query.', 'error');
+            return;
+        }
+
+        this.showSpinner = true;
+        getCustomMetadataRecordsByQuery({ query: this.queryValue })
+        .then(result => {
+            console.log(result);
+            this.data = result;
+            this.dataColumns = Object.keys(result[0]).map((item) => { return { label: item, fieldName: item }});
+            this.showSpinner = false;
+        })
+        .catch(error =>{
+            this.showSpinner = false;
+            console.error(error);
+            this.showToastEvent('Error', error.body.message, 'error');
+        });
+    }
+
+    showToastEvent(title, message, variant) {
+        const toastEvent = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant
+        });
+        this.dispatchEvent(toastEvent);
     }
 }

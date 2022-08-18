@@ -47,6 +47,12 @@ public with sharing class CustomMetadataService {
         return records;
     }
 
+    @AuraEnabled    
+    public static List<sObject> getCustomMetadataRecordsByQuery(String query){
+        List<sObject> records = Database.query(query);
+        return records;
+    }
+
     public class CustomMetadataDetailWrapper {
         @AuraEnabled public String label;
         @AuraEnabled public String pluralLabel;        

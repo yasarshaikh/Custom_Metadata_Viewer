@@ -57,6 +57,21 @@
 
     <!-- Records -->
     <template if:true={showRecords}>
+        <lightning-card class="slds-p-horizontal_small">
+            <p class="slds-m-around_xx-small slds-p-horizontal_small">
+                <lightning-textarea label="Query" 
+                                    max-length="5000" 
+                                    value={queryValue}
+                                    onchange={onQueryChange}
+                                    placeholder="Enter query to fetch results with sort & filters.">                    
+                </lightning-textarea>
+            </p>
+            <p class="slds-m-around_xx-small slds-p-horizontal_small">
+                <lightning-button label="Execute" variant="brand" onclick={onQueryExecute}>
+                </lightning-button>
+            </p>
+        </lightning-card>
+
         <lightning-datatable
             key-field="Id"
             data={data}
