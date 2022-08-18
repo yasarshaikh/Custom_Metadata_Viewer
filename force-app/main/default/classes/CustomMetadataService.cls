@@ -51,19 +51,11 @@ public with sharing class CustomMetadataService {
         @AuraEnabled public String label;
         @AuraEnabled public String pluralLabel;        
         @AuraEnabled public List<CustomMetadataService.FieldDetail> fields;
-
-        public CustomMetadataDetailWrapper(){
-
-        }
     }
 
     public class FieldDetail {
         @AuraEnabled public String fieldName;
         @AuraEnabled public String fieldLabel;
         @AuraEnabled public String fieldType;
-
-        public FieldDetail(){
-            
-        }
     }
 }
